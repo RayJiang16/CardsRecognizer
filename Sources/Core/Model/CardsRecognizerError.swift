@@ -16,4 +16,5 @@ public enum CardsRecognizerError: Error {
     
     case detectRectanglesFailed
     case detectTextsFailed
+    case recognizeFailed
 }

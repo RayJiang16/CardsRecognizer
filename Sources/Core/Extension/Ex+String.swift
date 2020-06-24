@@ -13,4 +13,9 @@ extension String {
         let pattern = "^[a-zA-Z]+$"
         return NSPredicate(format: "SELF MATCHES %@", pattern).evaluate(with: self)
     }
+    
+    var isChinese: Bool {
+        let pattern = "^[\\u4E00-\\u9FBB]+$"
+        return NSPredicate(format: "SELF MATCHES %@", pattern).evaluate(with: self)
+    }
 }

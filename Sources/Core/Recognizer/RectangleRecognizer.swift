@@ -39,7 +39,7 @@ extension RectangleRecognizer {
         let request = VNDetectRectanglesRequest(completionHandler: self.handleDetectedRectangles)
         // Customize & configure the request to detect only certain rectangles.
         request.maximumObservations = 8 // Vision currently supports up to 16.
-        request.minimumConfidence = 0.6 // Be confident.
+        request.minimumConfidence = 0.3 // Be confident. TODO: 0.6
         request.minimumAspectRatio = 0.3 // height / width
         return request
     }
@@ -57,10 +57,21 @@ extension RectangleRecognizer {
         }
         
         var cropImages: [UIImage] = []
+        var rectList: [CGRect] = []
         for observation in results {
             let rectBox = Helper.boundingBox(forRegionOfInterest: observation.boundingBox, withinImageSize: image.size)
             guard let cropImage = Helper.crop(image: image, rect: rectBox) else { return }
-            cropImages.append(cropImage)
+            
+            var inRect = false
+            for rect in rectList {
+                if rect.contains(rectBox) {
+                    inRect = true
+                }
+            }
+            if !inRect {
+                rectList.append(rectBox)
+                cropImages.append(cropImage)
+            }
         }
         
         if cropImages.isEmpty {

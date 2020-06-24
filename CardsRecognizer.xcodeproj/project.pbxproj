@@ -10,7 +10,7 @@
 		35528B212086645424D23B64 /* Pods_CardsRecognizerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1923911CA6465ABC3B6EFC1A /* Pods_CardsRecognizerTests.framework */; };
 		5AAA2ABE342E2F133F224356 /* Pods_CardsRecognizer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3B737537DEF62338C16EE81 /* Pods_CardsRecognizer.framework */; };
 		715C88E924A340A50057E7F3 /* IDCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715C88DF24A340A50057E7F3 /* IDCard.swift */; };
-		715C88EA24A340A50057E7F3 /* CardKitError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715C88E024A340A50057E7F3 /* CardKitError.swift */; };
+		715C88EA24A340A50057E7F3 /* CardsRecognizerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715C88E024A340A50057E7F3 /* CardsRecognizerError.swift */; };
 		715C88EB24A340A50057E7F3 /* RecognizeSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715C88E224A340A50057E7F3 /* RecognizeSource.swift */; };
 		715C88EC24A340A50057E7F3 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715C88E424A340A50057E7F3 /* Helper.swift */; };
 		715C88ED24A340A50057E7F3 /* TextRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715C88E624A340A50057E7F3 /* TextRecognizer.swift */; };
@@ -29,7 +29,6 @@
 		715C891824A3413D0057E7F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 715C891724A3413D0057E7F3 /* Assets.xcassets */; };
 		715C891B24A3413E0057E7F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 715C891924A3413E0057E7F3 /* LaunchScreen.storyboard */; };
 		715C892324A341650057E7F3 /* Example.json in Resources */ = {isa = PBXBuildFile; fileRef = 715C892024A341650057E7F3 /* Example.json */; };
-		715C892424A341650057E7F3 /* Data.json in Resources */ = {isa = PBXBuildFile; fileRef = 715C892124A341650057E7F3 /* Data.json */; };
 		715C892524A341650057E7F3 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715C892224A341650057E7F3 /* Person.swift */; };
 		715C892624A342930057E7F3 /* CardsRecognizer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71F0543E24A33FEB0090DB8B /* CardsRecognizer.framework */; };
 		715C892724A342930057E7F3 /* CardsRecognizer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 71F0543E24A33FEB0090DB8B /* CardsRecognizer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -88,7 +87,7 @@
 		44107F54EB033B3CBAF44A6C /* Pods-CardsRecognizer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CardsRecognizer.release.xcconfig"; path = "Target Support Files/Pods-CardsRecognizer/Pods-CardsRecognizer.release.xcconfig"; sourceTree = "<group>"; };
 		5C2E2303C67CAFFB0C365A00 /* Pods-CardsRecognizerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CardsRecognizerTests.debug.xcconfig"; path = "Target Support Files/Pods-CardsRecognizerTests/Pods-CardsRecognizerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		715C88DF24A340A50057E7F3 /* IDCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IDCard.swift; sourceTree = "<group>"; };
-		715C88E024A340A50057E7F3 /* CardKitError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardKitError.swift; sourceTree = "<group>"; };
+		715C88E024A340A50057E7F3 /* CardsRecognizerError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardsRecognizerError.swift; sourceTree = "<group>"; };
 		715C88E224A340A50057E7F3 /* RecognizeSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecognizeSource.swift; sourceTree = "<group>"; };
 		715C88E424A340A50057E7F3 /* Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		715C88E624A340A50057E7F3 /* TextRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextRecognizer.swift; sourceTree = "<group>"; };
@@ -111,7 +110,6 @@
 		715C891A24A3413E0057E7F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		715C891C24A3413E0057E7F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		715C892024A341650057E7F3 /* Example.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Example.json; sourceTree = "<group>"; };
-		715C892124A341650057E7F3 /* Data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Data.json; sourceTree = "<group>"; };
 		715C892224A341650057E7F3 /* Person.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 		715C893124A34B850057E7F3 /* Ex+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+String.swift"; sourceTree = "<group>"; };
 		71F0543E24A33FEB0090DB8B /* CardsRecognizer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CardsRecognizer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -170,7 +168,7 @@
 			isa = PBXGroup;
 			children = (
 				715C88DF24A340A50057E7F3 /* IDCard.swift */,
-				715C88E024A340A50057E7F3 /* CardKitError.swift */,
+				715C88E024A340A50057E7F3 /* CardsRecognizerError.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -223,7 +221,6 @@
 				715C891224A3413D0057E7F3 /* ViewController.swift */,
 				715C892224A341650057E7F3 /* Person.swift */,
 				715C892024A341650057E7F3 /* Example.json */,
-				715C892124A341650057E7F3 /* Data.json */,
 				715C891424A3413D0057E7F3 /* Main.storyboard */,
 				715C891724A3413D0057E7F3 /* Assets.xcassets */,
 				715C891924A3413E0057E7F3 /* LaunchScreen.storyboard */,
@@ -424,7 +421,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				715C892424A341650057E7F3 /* Data.json in Resources */,
 				715C892324A341650057E7F3 /* Example.json in Resources */,
 				715C891B24A3413E0057E7F3 /* LaunchScreen.storyboard in Resources */,
 				715C891824A3413D0057E7F3 /* Assets.xcassets in Resources */,
@@ -558,7 +554,7 @@
 				715C88E924A340A50057E7F3 /* IDCard.swift in Sources */,
 				715C88ED24A340A50057E7F3 /* TextRecognizer.swift in Sources */,
 				715C88EE24A340A50057E7F3 /* Recognizer.swift in Sources */,
-				715C88EA24A340A50057E7F3 /* CardKitError.swift in Sources */,
+				715C88EA24A340A50057E7F3 /* CardsRecognizerError.swift in Sources */,
 				715C88EF24A340A50057E7F3 /* RectangleRecognizer.swift in Sources */,
 				715C88EC24A340A50057E7F3 /* Helper.swift in Sources */,
 			);
@@ -622,7 +618,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 5HZKWDU956;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -642,7 +638,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 5HZKWDU956;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

@@ -60,4 +60,23 @@ struct Helper {
         dateFormat.dateFormat = toFormat
         return dateFormat.string(from: date)
     }
+    
+    static func transformImage(image: UIImage, transform: CGAffineTransform) -> UIImage? {
+        let view = UIView(frame: CGRect.zero)
+        let imageView = UIImageView(image: image)
+        imageView.transform = transform
+        view.addSubview(imageView)
+        imageView.frame.origin = CGPoint.zero
+        view.frame = CGRect(x: 0.0, y: 0.0, width: imageView.frame.size.width, height: imageView.frame.size.height)
+        
+        UIGraphicsBeginImageContext(view.frame.size)
+        view.layer.render(in: UIGraphicsGetCurrentContext()!)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        if let cgImage = newImage?.cgImage {
+            return UIImage(cgImage: cgImage)
+        }
+        return nil
+    }
 }

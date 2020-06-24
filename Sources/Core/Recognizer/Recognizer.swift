@@ -40,6 +40,7 @@ extension Recognizer {
 extension Recognizer {
     
     private func recognizeIDCard() {
+        print("image size: \(image.size)")
         RectangleRecognizer(image: image) { [weak self] (result) in
             guard let self = self else { return }
             switch result {
@@ -53,31 +54,66 @@ extension Recognizer {
     
     private func didGetRectangle(images: [UIImage]) {
         DispatchQueue.global().async {
-            let semaphore = DispatchSemaphore(value: 1)
+            let group = DispatchGroup()
             for image in images {
-                semaphore.wait()
+                group.enter()
                 self.recognizeIDCard(image: image) { (success) in
-                    semaphore.signal()
+                    group.leave()
+                }
+            }
+            group.notify(queue: .main) {
+                if self.results.isEmpty {
+                    self.completion(.failure(CardsRecognizerError.recognizeFailed))
+                } else {
+                    self.completion(.success(self.results))
                 }
             }
         }
     }
     
-    private func recognizeIDCard(image: UIImage, completion: @escaping ((Bool) -> Void)) {
-        // TODO: Rotation if needed
-        let customWords = ["姓 名", "性 别", "名 族", "出 生", "住 址", "公民身份号码", "签发机关", "有效期限"]
-        TextRecognizer(image: image, customWords: customWords) { (result) in
-            switch result {
-            case .success(let strings):
-                let card = IDCard.createIDCard(by: strings)
-                // TODO:
-                completion(true)
-                self.completion(.success([card]))
-            case .failure(let error):
-                print("Text Recognizer failed: \(error)")
-                completion(false)
+    private func recognizeIDCard(image: UIImage, end: Bool = false, completion: @escaping ((Bool) -> Void)) {
+        let customWords = ["姓名", "性别", "名族", "出生", "住址", "公民身份号码", "签发机关", "有效期限", "公安局", "分局"]
+        if image.size.height <= image.size.width {
+            TextRecognizer(image: image, customWords: customWords) { (result) in
+                switch result {
+                case .success(let strings):
+                    let card = IDCard.createIDCard(by: strings)
+                    if card.side == .unknown {
+                        if end {
+                            completion(false)
+                        } else {
+                            // 旋转180°
+                            DispatchQueue.main.async {
+                                print("Rotation 180")
+                                if let newImage = Helper.transformImage(image: image, transform: .init(rotationAngle: CGFloat.pi)) {
+                                    self.recognizeIDCard(image: newImage, end: true, completion: completion)
+                                } else {
+                                    completion(false)
+                                }
+                            }
+                        }
+                    } else {
+                        self.results.append(card)
+                        completion(true)
+                    }
+                case .failure(let error):
+                    print("Text Recognizer failed: \(error)")
+                    completion(false)
+                }
+            }.recognize()
+        } else if !end {
+            // 逆时针旋转90°
+            DispatchQueue.main.async {
+                print("Rotation 90")
+                if let newImage = Helper.transformImage(image: image, transform: .init(rotationAngle: -CGFloat.pi/2)) {
+                    self.recognizeIDCard(image: newImage, end: false, completion: completion)
+                } else {
+                    completion(false)
+                }
             }
-        }.recognize()
+        } else {
+            completion(false)
+        }
     }
     
     private func didGetText(results: [String]) {

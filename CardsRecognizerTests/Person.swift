@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftyJSON
+import CardsRecognizer
 
 class Persion {
     /// 姓名
@@ -64,6 +65,71 @@ class Persion {
     }
 }
 
+// MARK: - Check data
+extension Persion {
+    
+    @discardableResult
+    func check(data: IDCard.Front) -> Bool {
+        var errorCount = 0
+        if issue != data.issue {
+            errorCount += 1
+            print("签发机关错误 原始数据:\(issue) 识别数据:\(data.issue)")
+        }
+        if startDate != data.startDate {
+            errorCount += 1
+            print("有效期开始日期错误 原始数据:\(startDate) 识别数据:\(data.startDate)")
+        }
+        if endDate != data.endDate {
+            errorCount += 1
+            print("有效期结束日期错误 原始数据:\(endDate) 识别数据:\(data.endDate)")
+        }
+        if errorCount == 0 {
+            print("[\(name)]国徽面识别正确")
+        } else if errorCount > 0 {
+            print("[\(name)]国徽面识别一共错误\(errorCount)个")
+            print("[\(name)]国徽面图片:\(frontUrl)")
+        }
+        return errorCount == 0
+    }
+    
+    @discardableResult
+    func check(data: IDCard.Back) -> Bool {
+        var errorCount = 0
+        if name != data.name {
+            errorCount += 1
+            print("姓名错误 原始数据:\(name) 识别数据:\(data.name)")
+        }
+        if sex != data.sex.rawValue {
+            errorCount += 1
+            print("性别错误 原始数据:\(sex) 识别数据:\(data.sex.rawValue)")
+        }
+        if nationality != data.nationality {
+            errorCount += 1
+            print("民族错误 原始数据:\(nationality) 识别数据:\(data.nationality)")
+        }
+        if birth != data.birth {
+            errorCount += 1
+            print("出生错误 原始数据:\(birth) 识别数据:\(data.birth)")
+        }
+        if address != data.address {
+            errorCount += 1
+            print("住址错误 原始数据:\(address) 识别数据:\(data.address)")
+        }
+        if num != data.num {
+            errorCount += 1
+            print("身份证错误 原始数据:\(num) 识别数据:\(data.num)")
+        }
+        if errorCount == 0 {
+            print("[\(name)]人像面识别正确")
+        } else if errorCount > 0 {
+            print("[\(name)]人像面识别一共错误\(errorCount)个")
+            print("[\(name)]人像面图片:\(backUrl)")
+        }
+        return errorCount == 0
+    }
+}
+
+// MARK: - JSON
 extension Persion {
 
     convenience init?(json: JSON) {
@@ -71,15 +137,35 @@ extension Persion {
             let frontUrl = json["front_url"].string,
             let backUrl = json["back_url"].string
             else { return nil }
-        let sex = json["sex"].stringValue
+        var sex = json["sex"].stringValue
         let num = json["num"].stringValue
         let name = json["name"].stringValue
-        let birth = json["birth"].stringValue
+        var birth = json["birth"].stringValue
         let issue = json["issue"].stringValue
         let address = json["address"].stringValue
-        let endDate = json["end_date"].stringValue
-        let startDate = json["start_date"].stringValue
+        var endDate = json["end_date"].stringValue
+        var startDate = json["start_date"].stringValue
         let nationality = json["nationality"].stringValue
+        
+        // Format data if needed
+        func formatData(dateStr: String, from fromFormat: String, to toFormat: String) -> String {
+            let dateFormat = DateFormatter()
+            dateFormat.dateFormat = fromFormat
+            guard let date = dateFormat.date(from: dateStr) else { return "" }
+            dateFormat.dateFormat = toFormat
+            return dateFormat.string(from: date)
+        }
+        
+//        if num.count == 18 {
+//            sex = Int((num as NSString).substring(with: NSRange(location: 16, length: 1)))! % 2 == 0 ? "女" : "男"
+//            birth = (num as NSString).substring(with: NSRange(location: 6, length: 8))
+//        }
+//        birth = formatData(dateStr: birth, from: "yyyyMMdd", to: "yyyy-MM-dd")
+//        startDate = formatData(dateStr: startDate, from: "yyyyMMdd", to: "yyyy-MM-dd")
+//        if endDate != "长期" {
+//            endDate = formatData(dateStr: endDate, from: "yyyyMMdd", to: "yyyy-MM-dd")
+//        }
+        
         self.init(sex: sex,
                   num: num,
                   name: name,

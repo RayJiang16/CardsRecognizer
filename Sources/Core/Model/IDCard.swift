@@ -35,11 +35,11 @@ extension IDCard {
     /// 身份证正面（国徽面）模型
     public struct Front {
         /// 签发机关
-        let issue: String
+        public let issue: String
         /// 有效期开始日期 yyyy-MM-dd
-        let startDate: String
+        public let startDate: String
         /// 有效期结束日期 yyyy-MM-dd/长期
-        let endDate: String
+        public let endDate: String
     }
 }
 
@@ -49,17 +49,17 @@ extension IDCard {
     /// 身份证反面（人像面）
     public struct Back {
         /// 姓名
-        let name: String
+        public let name: String
         /// 性别
-        let sex: Sex
+        public let sex: Sex
         /// 名族
-        let nationality: String
+        public let nationality: String
         /// 出生日期 yyyy-MM-dd
-        let birth: String
+        public let birth: String
         /// 住址
-        let address: String
+        public let address: String
         /// 身份证号码
-        let num: String
+        public let num: String
     }
 }
 
@@ -105,12 +105,23 @@ extension IDCard.Back {
 extension IDCard {
     
     static func createIDCard(by strings: [String]) -> IDCard {
-        let strings = strings.map{
-            $0.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "：", with: "")
-        }.filter{
-            !$0.isEnglish
+        let strings = strings.map { (string) -> String in
+            var result = ""
+            for c in string {
+                if let ascii = c.asciiValue, 45 <= ascii && ascii <= 57 && ascii != 47 {
+                    result += String(c)
+                } else {
+                    let s = String(c)
+                    if s.isChinese {
+                        result += s
+                    }
+                }
+            }
+            return result
+        }.filter {
+            !$0.isEnglish || $0.isEmpty
         }
-        print(strings)
+//        print(strings)
         switch side(of: strings) {
         case .front:
             return .front(Front(by: strings))
@@ -141,16 +152,25 @@ extension IDCard.Front {
         var startDate = ""
         var endDate = ""
         for (idx, string) in strings.enumerated() {
-            if let range = string.range(of: "机关") {
-                issue = String(string[range.upperBound..<string.endIndex])
-                if issue.isEmpty && idx + 1 < strings.count {
-                    issue = strings[idx+1]
+            if string.contains("签发") || string.contains("机关") || string.contains("公安局") {
+                if let range = string.range(of: "关") {
+                    issue = String(string[range.upperBound..<string.endIndex])
+                    if issue.isEmpty && idx + 1 < strings.count && strings[idx+1].contains("公安局") {
+                        issue = strings[idx+1]
+                    }
+                } else if string.contains("公安局") && strings.contains("签发机关") {
+                    issue = string
                 }
+                issue = issue.replacingOccurrences(of: "扃", with: "局")
             } else if string.contains("20") && string.contains("-") {
-                let list = string.filter{ $0.isASCII }.split(separator: "-")
+                let list = string.split(separator: "-")
                 if list.count == 2 {
-                    startDate = list.first!.replacingOccurrences(of: ".", with: "-")
-                    endDate = list.last!.replacingOccurrences(of: ".", with: "-")
+                    startDate = list.first!.filter{ $0.isASCII }.replacingOccurrences(of: ".", with: "-")
+                    if list.last!.contains("长期") || list.last!.contains("期") {
+                        endDate = "长期"
+                    } else {
+                        endDate = list.last!.filter{ $0.isASCII }.replacingOccurrences(of: ".", with: "-")
+                    }
                 }
             }
         }
@@ -178,7 +198,7 @@ extension IDCard.Back {
                         name = strings[idx+1]
                     }
                 }
-            } else if index == 1 && (string.contains("性别") || string.contains("性") || string.contains("别")) {
+            } else if (index == 0 || index == 1) && (string.contains("性别") || string.contains("性") || string.contains("别")) {
                 index = 2
                 let nationalityString: String
                 if let range = string.range(of: "别") {
@@ -190,10 +210,19 @@ extension IDCard.Back {
                     nationalityString = string
                 }
                 if let nationalityRange = nationalityString.range(of: "族") {
+                    index = 3
                     nationality = String(nationalityString[nationalityRange.upperBound..<nationalityString.endIndex])
                 }
-            } else if index == 2 && (string.contains("出生") || string.contains("出") || string.contains("生")) {
+            } else if (index == 1 || index == 2) && (string.contains("民族") || string.contains("族")) {
                 index = 3
+                if let range = string.range(of: "族") {
+                    nationality = String(string[range.upperBound..<string.endIndex])
+                    if nationality.isEmpty && idx + 1 < strings.count {
+                        nationality = strings[idx+1]
+                    }
+                }
+            } else if (index == 2 || index == 3) && (string.contains("年") || string.contains("月") || string.contains("日")) {
+                index = 4
                 var birthList: [String] = []
                 var str = ""
                 for c in string { // 48-57
@@ -207,13 +236,13 @@ extension IDCard.Back {
                     }
                 }
                 birth = birthList.map{ $0.count == 1 ? "0\($0)" : $0 }.joined(separator: "-")
-            } else if index == 3 && (string.contains("住址") || string.contains("住") || string.contains("址")) {
-                index = 4
+            } else if (index == 3 || index == 4) && (string.contains("住址") || string.contains("住") || string.contains("址")) {
+                index = 5
                 if let range = string.range(of: "址") {
                     address = String(string[range.upperBound..<string.endIndex])
                 }
-            } else if index == 4 && (string.contains("公民") || string.contains("身份")) {
-                index = 5
+            } else if (index == 4 || index == 5) && (string.contains("公民") || string.contains("身份") || string.contains("号码")) {
+                index = 6
                 for c in string { // 48-57
                     let ascii = c.asciiValue ?? 0
                     let isNum = 48 <= ascii && ascii <= 57
@@ -227,7 +256,7 @@ extension IDCard.Back {
                 if num.isEmpty && idx + 1 < strings.count {
                     num = strings[idx+1]
                 }
-            } else if index == 4 { // 住址补充
+            } else if index == 5 { // 住址补充
                 address += string
             }
         }

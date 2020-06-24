@@ -13,6 +13,7 @@ import CardsRecognizer
 class ViewController: UIViewController {
 
     var list: [Persion] = []
+    var errorCount = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,38 +23,65 @@ class ViewController: UIViewController {
     private func loadData() {
         readDataJsonFile()
         if !list.isEmpty {
-            startTest()
+            DispatchQueue.global().async {
+                self.startTest()
+            }
         }
     }
     
     private func startTest() {
-        print("Start test, test count: \(list.count)")
+        print("开始测试 测试数量: \(list.count)")
+        
+        let semaphore = DispatchSemaphore(value: 1)
         for obj in list {
+            semaphore.wait()
             downloadPhoto(obj: obj) { (success) in
-                if !success { return }
-                self.recognize(obj: obj)
+                if !success {
+                    semaphore.signal()
+                    return
+                }
+                self.recognize(obj: obj) {
+                    semaphore.signal()
+                }
             }
         }
+        semaphore.wait()
+        print("识别结束，一共识别错误\(errorCount)个")
+        semaphore.signal()
     }
     
-    private func recognize(obj: Persion) {
-        print("Start recognize")
-        Recognizer.recognizeIDCard(source: obj.frontImage!) { (result) in
-            switch result {
-            case .success(let card):
-                print(card)
-            case .failure(let error):
-                print(error)
+    private func recognize(obj: Persion, completion: @escaping (() -> Void)) {
+        print("开始识别: \(obj.name)")
+        let group = DispatchGroup()
+        for image in [obj.frontImage!, obj.backImage!] {
+            group.enter()
+            Recognizer.recognizeIDCard(source: image) { (result) in
+                switch result {
+                case .success(let cards):
+                    for card in cards {
+                        switch card {
+                        case .front(let frontCard):
+                            if !obj.check(data: frontCard) {
+                                self.errorCount += 1
+                            }
+                        case .back(let backCard):
+                            if !obj.check(data: backCard) {
+                                self.errorCount += 1
+                            }
+                        case .unknown:
+                            print("未知")
+                        }
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+                group.leave()
             }
         }
         
-        Recognizer.recognizeIDCard(source: obj.backImage!) { (result) in
-            switch result {
-            case .success(let card):
-                print(card)
-            case .failure(let error):
-                print(error)
-            }
+        group.notify(queue: .main) {
+            print("===============================")
+            completion()
         }
     }
 }
@@ -63,7 +91,7 @@ extension ViewController {
     
     private func readDataJsonFile() {
         guard let dataPath = Bundle.main.path(forResource: "Data", ofType: "json") else {
-            print("Data.json 文件不存在")
+            print("Data.json 文件不存在，请按照 Example.json 文件的格式做好 json 数据，放入 Data.json 中")
             return
         }
         let jsonStr = (try? String(contentsOfFile: dataPath)) ?? ""
@@ -81,19 +109,19 @@ extension ViewController {
     
     private func downloadPhoto(obj: Persion, completion: @escaping ((Bool) -> Void)) {
         guard let frontUrl = URL(string: obj.frontUrl) else {
-            print("身份证国徽面图片URL错误: \(obj.frontUrl)")
+            print("[\(obj.name)]身份证国徽面图片URL错误: \(obj.frontUrl)")
             return
         }
         guard let backUrl = URL(string: obj.backUrl) else {
-            print("身份证人像面图片URL错误: \(obj.backUrl)")
+            print("[\(obj.name)]身份证人像面图片URL错误: \(obj.backUrl)")
             return
         }
         
+        print("开始下载身份证图片: \(obj.name)")
         let group = DispatchGroup()
-        let downloader = KingfisherManager.shared.downloader
-        
+        let manager = KingfisherManager.shared
         group.enter()
-        downloader.downloadImage(with: frontUrl) { (result) in
+        manager.retrieveImage(with: frontUrl) { (result) in
             switch result {
             case .success(let res):
                 obj.frontImage = res.image
@@ -104,7 +132,7 @@ extension ViewController {
         }
         
         group.enter()
-        downloader.downloadImage(with: backUrl) { (result) in
+        manager.retrieveImage(with: backUrl) { (result) in
             switch result {
             case .success(let res):
                 obj.backImage = res.image
