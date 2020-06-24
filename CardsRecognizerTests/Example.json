@@ -1,0 +1,15 @@
+[
+    {
+        "name":"姓名",
+        "sex":"性别",
+        "nationality":"名族",
+        "birth":"yyyyMMdd",
+        "address":"住址",
+        "num":"身份证号",
+        "issue":"签发机关",
+        "start_date":"yyyyMMdd",
+        "end_date":"yyyyMMdd",
+        "face_url":"人像面图片URL",
+        "back_url":"国徽面图片URL"
+    }
+]
