@@ -105,7 +105,11 @@ extension IDCard.Back {
 extension IDCard {
     
     static func createIDCard(by strings: [String]) -> IDCard {
-        let strings = strings.map{ $0.replacingOccurrences(of: " ", with: "") }
+        let strings = strings.map{
+            $0.replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "：", with: "")
+        }.filter{
+            !$0.isEnglish
+        }
         print(strings)
         switch side(of: strings) {
         case .front:
@@ -136,11 +140,14 @@ extension IDCard.Front {
         var issue = ""
         var startDate = ""
         var endDate = ""
-        for string in strings {
+        for (idx, string) in strings.enumerated() {
             if let range = string.range(of: "机关") {
                 issue = String(string[range.upperBound..<string.endIndex])
+                if issue.isEmpty && idx + 1 < strings.count {
+                    issue = strings[idx+1]
+                }
             } else if string.contains("20") && string.contains("-") {
-                let list = string.split(separator: "-")
+                let list = string.filter{ $0.isASCII }.split(separator: "-")
                 if list.count == 2 {
                     startDate = list.first!.replacingOccurrences(of: ".", with: "-")
                     endDate = list.last!.replacingOccurrences(of: ".", with: "-")
@@ -162,11 +169,14 @@ extension IDCard.Back {
         var address = ""
         var num = ""
         var index = 0
-        for string in strings {
+        for (idx, string) in strings.enumerated() {
             if index == 0 && (string.contains("姓名") || string.contains("姓") || string.contains("名")) {
                 index = 1
                 if let range = string.range(of: "名") {
                     name = String(string[range.upperBound..<string.endIndex])
+                    if name.isEmpty && idx + 1 < strings.count {
+                        name = strings[idx+1]
+                    }
                 }
             } else if index == 1 && (string.contains("性别") || string.contains("性") || string.contains("别")) {
                 index = 2
@@ -213,6 +223,9 @@ extension IDCard.Back {
                 }
                 if num.count == 17 {
                     num += "X"
+                }
+                if num.isEmpty && idx + 1 < strings.count {
+                    num = strings[idx+1]
                 }
             } else if index == 4 { // 住址补充
                 address += string

@@ -72,6 +72,7 @@ extension Recognizer {
                 let card = IDCard.createIDCard(by: strings)
                 // TODO:
                 completion(true)
+                self.completion(.success([card]))
             case .failure(let error):
                 print("Text Recognizer failed: \(error)")
                 completion(false)

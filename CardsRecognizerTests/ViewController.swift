@@ -31,7 +31,28 @@ class ViewController: UIViewController {
         for obj in list {
             downloadPhoto(obj: obj) { (success) in
                 if !success { return }
-                // TODO: 开始识别
+                self.recognize(obj: obj)
+            }
+        }
+    }
+    
+    private func recognize(obj: Persion) {
+        print("Start recognize")
+        Recognizer.recognizeIDCard(source: obj.frontImage!) { (result) in
+            switch result {
+            case .success(let card):
+                print(card)
+            case .failure(let error):
+                print(error)
+            }
+        }
+        
+        Recognizer.recognizeIDCard(source: obj.backImage!) { (result) in
+            switch result {
+            case .success(let card):
+                print(card)
+            case .failure(let error):
+                print(error)
             }
         }
     }

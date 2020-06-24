@@ -21,7 +21,6 @@ xcuserdata/
 *.moved-aside
 *.xccheckout
 *.xcscmblueprint
-CardsRecognizerTests/Data.json
 
 ## Obj-C/Swift specific
 *.hmap

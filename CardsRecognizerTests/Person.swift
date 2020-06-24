@@ -68,7 +68,7 @@ extension Persion {
 
     convenience init?(json: JSON) {
         guard
-            let faceUrl = json["face_url"].string,
+            let frontUrl = json["front_url"].string,
             let backUrl = json["back_url"].string
             else { return nil }
         let sex = json["sex"].stringValue
@@ -87,8 +87,8 @@ extension Persion {
                   issue: issue,
                   address: address,
                   endDate: endDate,
-                  backUrl: faceUrl,
-                  frontUrl: backUrl,
+                  backUrl: backUrl,
+                  frontUrl: frontUrl,
                   startDate: startDate,
                   backImage: nil,
                   frontImage: nil,

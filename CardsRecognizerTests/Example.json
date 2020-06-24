@@ -9,7 +9,7 @@
         "issue":"签发机关",
         "start_date":"yyyyMMdd",
         "end_date":"yyyyMMdd",
-        "face_url":"人像面图片URL",
-        "back_url":"国徽面图片URL"
+        "front_url":"国徽面图片URL",
+        "back_url":"人像面图片URL"
     }
 ]

@@ -35,6 +35,7 @@
 		715C892724A342930057E7F3 /* CardsRecognizer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 71F0543E24A33FEB0090DB8B /* CardsRecognizer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		715C892B24A342970057E7F3 /* CardsRecognizer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71F0543E24A33FEB0090DB8B /* CardsRecognizer.framework */; };
 		715C892C24A342970057E7F3 /* CardsRecognizer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 71F0543E24A33FEB0090DB8B /* CardsRecognizer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		715C893224A34B850057E7F3 /* Ex+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715C893124A34B850057E7F3 /* Ex+String.swift */; };
 		71F0544324A33FEB0090DB8B /* CardsRecognizer.h in Headers */ = {isa = PBXBuildFile; fileRef = 71F0544124A33FEB0090DB8B /* CardsRecognizer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D533D878424EFE685042E0E4 /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DCFFA4D6D1E8C973FB1E231 /* Pods_Example.framework */; };
 /* End PBXBuildFile section */
@@ -112,6 +113,7 @@
 		715C892024A341650057E7F3 /* Example.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Example.json; sourceTree = "<group>"; };
 		715C892124A341650057E7F3 /* Data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Data.json; sourceTree = "<group>"; };
 		715C892224A341650057E7F3 /* Person.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
+		715C893124A34B850057E7F3 /* Ex+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+String.swift"; sourceTree = "<group>"; };
 		71F0543E24A33FEB0090DB8B /* CardsRecognizer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CardsRecognizer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		71F0544124A33FEB0090DB8B /* CardsRecognizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CardsRecognizer.h; sourceTree = "<group>"; };
 		71F0544224A33FEB0090DB8B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 				715C88E324A340A50057E7F3 /* Helper */,
 				715C88E124A340A50057E7F3 /* Protocol */,
 				715C88DE24A340A50057E7F3 /* Model */,
+				715C893024A34B770057E7F3 /* Extension */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -227,6 +230,14 @@
 				715C891C24A3413E0057E7F3 /* Info.plist */,
 			);
 			path = CardsRecognizerTests;
+			sourceTree = "<group>";
+		};
+		715C893024A34B770057E7F3 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				715C893124A34B850057E7F3 /* Ex+String.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 		71F0543424A33FEB0090DB8B = {
@@ -543,6 +554,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				715C88EB24A340A50057E7F3 /* RecognizeSource.swift in Sources */,
+				715C893224A34B850057E7F3 /* Ex+String.swift in Sources */,
 				715C88E924A340A50057E7F3 /* IDCard.swift in Sources */,
 				715C88ED24A340A50057E7F3 /* TextRecognizer.swift in Sources */,
 				715C88EE24A340A50057E7F3 /* Recognizer.swift in Sources */,
@@ -650,6 +662,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5HZKWDU956;
 				INFOPLIST_FILE = CardsRecognizerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -669,6 +682,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5HZKWDU956;
 				INFOPLIST_FILE = CardsRecognizerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
